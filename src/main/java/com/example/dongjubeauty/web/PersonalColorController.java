@@ -56,18 +56,14 @@ public class PersonalColorController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Map<String, Object>> analyzeFile(
+    public ResponseEntity<String> analyzeFile(
             @RequestPart("file") MultipartFile file,
             @RequestParam(defaultValue = "false") boolean debug,
             @RequestParam(name = "exif_correction", defaultValue = "true") boolean exifCorrection,
             @RequestHeader(value = "X-Trace-Id", required = false) String traceId,
             @RequestHeader(value = "Accept-Language", required = false) String acceptLanguage
     ) {
-        if (file == null || file.isEmpty()) {
-            return withTraceHeader(Map.of("status", "error", "code", "INVALID_IMAGE", "message", "빈 파일입니다."));
-        }
-        Map<String, Object> res = addKoreanLabels(service.analyzeFile(file, debug, exifCorrection, traceId, acceptLanguage));
-        return withTraceHeader(res);
+        return service.analyzeFile(file, debug, exifCorrection, traceId, acceptLanguage);
     }
 
     // ----- 얼굴형: JSON -----
